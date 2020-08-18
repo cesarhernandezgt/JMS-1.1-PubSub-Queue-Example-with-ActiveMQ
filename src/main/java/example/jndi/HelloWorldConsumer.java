@@ -9,21 +9,16 @@ public class HelloWorldConsumer implements Runnable,
     public void run() {
         try {
 
-            // Create a ConnectionFactory without JNDI
-            //ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
-
             // Create ConnectionFactory with JNDI
             javax.naming.Context ctx = new javax.naming.InitialContext();
-            javax.jms.TopicConnectionFactory activeMQConnectionFactory = (javax.jms.TopicConnectionFactory)ctx.lookup("ConnectionFactory");
+            javax.jms.TopicConnectionFactory activeMQConnectionFactory = (javax.jms.TopicConnectionFactory) ctx.lookup("ConnectionFactory");
 
             PooledConnectionFactory pooledActiveMQConnectionFactory = new PooledConnectionFactory();
             pooledActiveMQConnectionFactory.setConnectionFactory(activeMQConnectionFactory);
-//            activeMQConnectionFactory.createTopicConnection();
 
-
-            // Create a Connection
-//            Connection connection = activeMQConnectionFactory.createConnection();
             Connection connection = pooledActiveMQConnectionFactory.createConnection();
+            //            pooledActiveMQConnectionFactory.setMaxConnections(80);
+            //            System.out.println(pooledActiveMQConnectionFactory.getMaxConnections());
             connection.start();
 
             connection.setExceptionListener(this);
@@ -32,7 +27,7 @@ public class HelloWorldConsumer implements Runnable,
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             // Create the destination (Topic or Queue)
-            Destination destination = session.createQueue("JavaHonk");
+            Destination destination = session.createQueue("JavaRocks");
 
             // Create a MessageConsumer from the Session to the Topic or
             // Queue
